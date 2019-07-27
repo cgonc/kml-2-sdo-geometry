@@ -52,7 +52,7 @@ CREATE SEQUENCE KML_SHAPE_FAIL_LOG_SEQ
   ORDER;
 ````
 
-Before creating a spatial index you need to add the meta information of your KML_SAHPE table to your **user_sdo_geom_metadata**.
+Before creating a spatial index you need to add the meta information of your **KML_SHAPE** table to your **user_sdo_geom_metadata**.
 For detailed instruction on adding a spatial index, you can check the official documents.
 https://docs.oracle.com/database/121/SPATL/toc.htm
 
