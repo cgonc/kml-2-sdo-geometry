@@ -66,6 +66,7 @@ spring.datasource.password=${ORACLE_CONNECTION_PASSWORD}
 kml.target.path=${KML_FOLDER}
 ````
 
+## Running
 After boot, a spring component function named KmlConverter.convertMissingKmlFiles will be scheduled to work. 
 It will roughly do the following things :
 
