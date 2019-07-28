@@ -17,21 +17,18 @@ public class KmlValidatorService {
 	private static final Logger log = LoggerFactory.getLogger(KmlValidatorService.class);
 
 	@Autowired
-	private KmlReaderService kmlReaderService;
-
-	@Autowired
 	private KmlShapeService kmlShapeService;
 
 	public void validateAndRectifyGeometries(Path fileName, int trialCount) {
-		List<KmlValidationResult> allInvalidGeometriesIfAny = kmlReaderService.findAllInvalidGeometriesIfAny(fileName.getFileName()
-																													 .toString());
+		String filename = fileName.getFileName().toString();
+		List<KmlValidationResult> allInvalidGeometriesIfAny = kmlShapeService.findAllInvalidGeometriesIfAny(filename);
+
 		if(CollectionUtils.isNotEmpty(allInvalidGeometriesIfAny)){
 			log.info("Invalid geometries has been found {}", allInvalidGeometriesIfAny.size());
 			int validationCount = kmlShapeService.tryToValidateGeometries(allInvalidGeometriesIfAny);
 			log.info("Geometries are validated : {}", validationCount);
 
-			allInvalidGeometriesIfAny = kmlReaderService.findAllInvalidGeometriesIfAny(fileName.getFileName()
-																							   .toString());
+			allInvalidGeometriesIfAny = kmlShapeService.findAllInvalidGeometriesIfAny(filename);
 			if(CollectionUtils.isNotEmpty(allInvalidGeometriesIfAny) && trialCount < 3){
 				int trialCountCallStack = trialCount + 1;
 				log.error("SEVERE ERROR. INVALID GEOMETRY HAS FOUND {} TRY ONCE MORE {} / 3", fileName.getFileName(), trialCount);

@@ -48,4 +48,8 @@ public class KmlShapeService {
 		return rowUpdates.get();
 	}
 
+	public List<KmlValidationResult> findAllInvalidGeometriesIfAny(String filename) {
+		return kmlShapeDao.findAllInvalidGeometriesIfAny(filename);
+	}
+
 }

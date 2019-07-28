@@ -36,19 +36,6 @@ public class KmlShapeDao {
 		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 	}
 
-	private Map<String, Object> getSqlParameterMap(KmlShapeDTO kmlShapeDTO) {
-		Map<String, Object> parameterMap = new HashMap<>();
-		parameterMap.put("id", 1000L);
-		parameterMap.put("geometry_type", kmlShapeDTO.getGeometryType());
-		parameterMap.put("geometry", JGeometryUtils.getOracleStructFromGeometry(kmlShapeDTO.getGeometry(), dataSource));
-		parameterMap.put("file_name", kmlShapeDTO.getFileName());
-		return parameterMap;
-	}
-
-	private SqlParameterSource getSqlParameterSource(KmlShapeDTO kmlShapeDTO) {
-		return new MapSqlParameterSource().addValues(getSqlParameterMap(kmlShapeDTO));
-	}
-
 	public List<String> findAllKmlShapeFileNames() {
 		String sql = "select distinct file_name from kml_shape where file_name is not null";
 		return namedParameterJdbcTemplate.query(sql, (resultSet, i) -> resultSet.getString("file_name"));
@@ -62,7 +49,12 @@ public class KmlShapeDao {
 	@Transactional (propagation = Propagation.MANDATORY)
 	public int insert(KmlShapeDTO kmlShapeDTO) {
 		String insertStatement = "insert into kml_shape(id, geometry_type, geometry, file_name) values (kml_shape_seq.nextval, :geometry_type, :geometry, :file_name)";
-		return namedParameterJdbcTemplate.update(insertStatement, getSqlParameterSource(kmlShapeDTO));
+		MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+		mapSqlParameterSource.addValue("geometry_type", kmlShapeDTO.getGeometryType());
+		mapSqlParameterSource.addValue("geometry", JGeometryUtils.getOracleStructFromGeometry(kmlShapeDTO.getGeometry(), dataSource));
+		mapSqlParameterSource.addValue("file_name", kmlShapeDTO.getFileName());
+
+		return namedParameterJdbcTemplate.update(insertStatement, mapSqlParameterSource);
 	}
 
 	public List<KmlValidationResult> findAllInvalidGeometriesIfAny(String filename) {

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.shape.converter.kmltosdo.kml.service.dao.KmlShapeDao;
-import com.shape.converter.kmltosdo.kml.service.model.KmlValidationResult;
 
 @Service
 public class KmlReaderService {
@@ -45,7 +44,4 @@ public class KmlReaderService {
 					.collect(Collectors.toList());
 	}
 
-	public List<KmlValidationResult> findAllInvalidGeometriesIfAny(String filename) {
-		return kmlShapeDao.findAllInvalidGeometriesIfAny(filename);
-	}
 }

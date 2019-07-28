@@ -77,3 +77,8 @@ It will roughly do the following things :
         d. Validate inserted geometries and rectify them.
         e. Insert a fail log to your database if an error occurs during this transaction
         
+After persisting JTS geometries as SDO_GEOMETRY in the database, the program will try to validate them. 
+If it finds any invalid geometry, it will try to rectify them. If the rectification fails, the program will
+delete the unvalidated geometries. The program forces that any invalid geometry will not be persisted into the database.
+It will try these steps three times until all of the geometry which was inserted is valid. After that, if it
+fails, the program will log this situation. 
